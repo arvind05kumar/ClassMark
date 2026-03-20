@@ -1,0 +1,2085 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClassMark — CGC Landran Attendance</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+
+  <!-- ✅ GOOGLE ADSENSE — Replace XXXX with your Publisher ID -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --navy: #0B1622;
+      --navy-mid: #162032;
+      --navy-card: rgba(255, 255, 255, 0.045);
+      --border: rgba(255, 255, 255, 0.09);
+      --blue: #3B82F6;
+      --blue-light: #60A5FA;
+      --blue-glow: rgba(59, 130, 246, 0.18);
+      --white: #FFFFFF;
+      --muted: #7A96B2;
+      --success: #22C55E;
+      --danger: #EF4444;
+      --warn: #F59E0B;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── PAGES ─── */
+    .page {
+      display: none;
+      flex-direction: column;
+      min-height: 100vh;
+      animation: fadein 0.35s ease;
+    }
+
+    .page.active {
+      display: flex;
+    }
+
+    @keyframes fadein {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ─── AD BANNER ─── */
+    .ad-banner {
+      width: 100%;
+      min-height: 60px;
+      background: rgba(0, 0, 0, 0.35);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      flex-shrink: 0;
+    }
+
+    .ad-inner {
+      width: 728px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1.5px;
+      max-width: 100%;
+    }
+
+    /* ─── NAV ─── */
+    .topnav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 28px;
+      background: rgba(11, 22, 34, 0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 60px;
+      z-index: 100;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .cgc-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      object-fit: contain;
+      background: var(--white);
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .brand-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 21px;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.5px;
+    }
+
+    .brand-name em {
+      color: var(--blue);
+      font-style: normal;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .btn-blue {
+      background: linear-gradient(135deg, var(--blue), var(--blue-light));
+      color: var(--navy);
+      font-weight: 700;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .btn-blue:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
+    }
+
+    .btn-success {
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .btn-success:hover {
+      background: rgba(34, 197, 94, 0.25);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      color: var(--danger);
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.2);
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      padding: 60px 24px;
+      gap: 40px;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(11, 22, 34, 0.72) 0%, rgba(11, 22, 34, 0.88) 100%),
+        url('CGCL.jpg') center/cover no-repeat;
+    }
+
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 50%, transparent 20%, rgba(11, 22, 34, 0.7) 100%);
+    }
+
+    .hero-text {
+      position: relative;
+      z-index: 2;
+      max-width: 560px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.28);
+      color: var(--blue);
+      padding: 5px 16px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+
+    .hero-text h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(38px, 7vw, 68px);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 18px;
+    }
+
+    .hero-text h1 span {
+      color: var(--blue);
+    }
+
+    .hero-text p {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    /* ─── SELECT CARD ─── */
+    .select-card {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 420px;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(24px);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+    }
+
+    .field-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      margin-bottom: 9px;
+      display: block;
+    }
+
+    select,
+    input[type="text"],
+    input[type="password"],
+    input[type="number"],
+    input[type="time"] {
+      width: 100%;
+      padding: 13px 16px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+      margin-bottom: 16px;
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%237A96B2' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      cursor: pointer;
+    }
+
+    select option {
+      background: #1a2d44;
+    }
+
+    select:focus,
+    input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    input::placeholder {
+      color: var(--muted);
+    }
+
+    .mark-btn {
+      width: 100%;
+      padding: 15px;
+      border-radius: 12px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      letter-spacing: 0.3px;
+      margin-bottom: 14px;
+    }
+
+    .mark-btn.on {
+      background: linear-gradient(135deg, var(--blue), var(--blue-light));
+      color: var(--navy);
+      box-shadow: 0 6px 24px rgba(59, 130, 246, 0.32);
+    }
+
+    .mark-btn.on:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(59, 130, 246, 0.45);
+    }
+
+    .mark-btn.off {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--muted);
+      cursor: not-allowed;
+      border: 1px solid var(--border);
+    }
+
+    .live-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--danger);
+      flex-shrink: 0;
+    }
+
+    .dot.live {
+      background: var(--success);
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6);
+      animation: ripple 1.8s infinite;
+    }
+
+    @keyframes ripple {
+      0% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+      }
+
+      70% {
+        box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+      }
+    }
+
+    /* ─── FORM PAGES ─── */
+    .centered-page {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 20px;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.045);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 36px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .card-header {
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    .section-tag {
+      display: inline-block;
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--blue);
+      padding: 4px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .card-header h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+
+    .card-header p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .input-group {
+      margin-bottom: 18px;
+    }
+
+    /* ─── CAMERA ─── */
+    .cam-box {
+      border: 2px dashed rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      overflow: hidden;
+      height: 230px;
+      background: rgba(0, 0, 0, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .cam-box video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .cam-box.streaming video {
+      display: block;
+    }
+
+    .cam-box img.snap {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+      border-radius: 12px;
+    }
+
+    .cam-empty {
+      text-align: center;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    .cam-empty svg {
+      margin-bottom: 8px;
+      opacity: 0.5;
+    }
+
+    .cam-empty span {
+      font-size: 13px;
+      display: block;
+    }
+
+    canvas#snap-canvas {
+      display: none;
+    }
+
+    .cam-actions {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .cam-actions .btn {
+      flex: 1;
+      justify-content: center;
+      font-size: 13px;
+      padding: 9px 12px;
+    }
+
+    /* ─── SUCCESS ─── */
+    .success-page {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .tick-circle {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: rgba(34, 197, 94, 0.12);
+      border: 3px solid var(--success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 28px;
+      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .success-page h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--success);
+      margin-bottom: 10px;
+    }
+
+    .success-page p {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 320px;
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .receipt {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 26px;
+      min-width: 280px;
+      text-align: left;
+    }
+
+    .rrow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    .rrow:last-child {
+      border-bottom: none;
+    }
+
+    .rrow .rl {
+      color: var(--muted);
+    }
+
+    .rrow .rv {
+      font-weight: 600;
+    }
+
+    /* ─── ADMIN LOGIN ─── */
+    .login-page {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 20px;
+      background:
+        radial-gradient(ellipse at 80% 10%, rgba(59, 130, 246, 0.07) 0%, transparent 55%),
+        radial-gradient(ellipse at 20% 90%, rgba(59, 130, 246, 0.04) 0%, transparent 50%),
+        var(--navy);
+    }
+
+    .login-card {
+      background: rgba(255, 255, 255, 0.045);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 44px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .login-card .brand {
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+
+    .role-pill {
+      display: inline-block;
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--blue);
+      padding: 4px 14px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+
+    .login-card h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .login-card .sub {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .err {
+      color: var(--danger);
+      font-size: 13px;
+      margin-bottom: 14px;
+      display: none;
+    }
+
+    .demo-box {
+      margin-top: 20px;
+      background: rgba(59, 130, 246, 0.07);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--muted);
+      text-align: left;
+      line-height: 2;
+    }
+
+    .demo-box b {
+      color: var(--white);
+    }
+
+    .demo-box .dg {
+      color: var(--blue);
+    }
+
+    /* ─── DASHBOARD ─── */
+    .dashboard-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .dash-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 28px;
+      background: rgba(11, 22, 34, 0.98);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 60px;
+      z-index: 100;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .dash-nav .left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .dash-nav .right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cr-meta {
+      font-size: 13px;
+    }
+
+    .cr-meta .name {
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .cr-meta .sec {
+      font-size: 12px;
+      color: var(--blue);
+      margin-top: 1px;
+    }
+
+    .dash-body {
+      padding: 28px;
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Toggle Card */
+    .toggle-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .toggle-card .info h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .toggle-card .info p {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .switch-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sw-label {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .sw {
+      position: relative;
+      width: 54px;
+      height: 28px;
+    }
+
+    .sw input {
+      display: none;
+    }
+
+    .sw-track {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .sw-track::before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      left: 4px;
+      top: 3px;
+      background: var(--muted);
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    .sw input:checked~.sw-track {
+      background: rgba(34, 197, 94, 0.18);
+      border-color: var(--success);
+    }
+
+    .sw input:checked~.sw-track::before {
+      transform: translateX(26px);
+      background: var(--success);
+    }
+
+    /* Stats */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 22px;
+    }
+
+    .stat-num {
+      font-family: 'Outfit', sans-serif;
+      font-size: 44px;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-num.g {
+      color: var(--success);
+    }
+
+    .stat-num.y {
+      color: var(--warn);
+    }
+
+    .stat-num.r {
+      color: var(--danger);
+    }
+
+    .stat-num.w {
+      color: var(--white);
+    }
+
+    .stat-lbl {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* Student Table */
+    .tbl-wrap {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .tbl-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .tbl-top h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .dl-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 20px;
+      background: linear-gradient(135deg, var(--blue), var(--blue-light));
+      color: var(--navy);
+      border: none;
+      border-radius: 10px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .dl-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
+    }
+
+    .th-row,
+    .tr-row {
+      display: grid;
+      grid-template-columns: 56px 1fr 100px 120px 110px;
+      padding: 13px 20px;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .th-row {
+      background: rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid var(--border);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .tr-row {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    .tr-row:last-child {
+      border-bottom: none;
+    }
+
+    .tr-row:hover {
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .stu-photo {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--border);
+      display: block;
+    }
+
+    .stu-name {
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .stu-roll {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .sec-chip {
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--blue);
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-block;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .badge.pend {
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--warn);
+    }
+
+    .badge.appr {
+      background: rgba(34, 197, 94, 0.12);
+      color: var(--success);
+    }
+
+    .appr-btn {
+      padding: 7px 13px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      background: rgba(34, 197, 94, 0.1);
+      color: var(--success);
+      transition: all 0.18s;
+    }
+
+    .appr-btn:hover {
+      background: rgba(34, 197, 94, 0.22);
+    }
+
+    .appr-btn.done {
+      border-color: var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: default;
+    }
+
+    .empty-tbl {
+      padding: 52px 24px;
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .empty-tbl span {
+      font-size: 32px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 680px) {
+
+      .th-row,
+      .tr-row {
+        grid-template-columns: 44px 1fr 90px 90px;
+      }
+
+      .th-row div:nth-child(3),
+      .tr-row div:nth-child(3) {
+        display: none;
+      }
+
+      .topnav {
+        padding: 12px 16px;
+      }
+
+      .dash-body {
+        padding: 16px;
+      }
+
+      .glass-card,
+      .login-card {
+        padding: 24px 20px;
+      }
+
+      .hero {
+        padding: 40px 16px;
+      }
+    }
+
+    /* ─── PRINT ─── */
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =====================================================
+     PAGE 1 — STUDENT LANDING
+===================================================== -->
+  <div class="page active" id="p-landing">
+
+    <!-- Ad Banner -->
+    <div class="ad-banner no-print">
+      <div class="ad-inner">
+        <!-- Replace with actual AdSense ins tag after approval -->
+        Advertisement · 728×60 · Google AdSense
+      </div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="topnav">
+      <a class="brand" href="#">
+        <img src="CGCL%20LOGO.png" class="cgc-badge" alt="CGCL">
+        <span class="brand-name">Class<em>Mark</em></span>
+      </a>
+      <div class="nav-actions">
+        <button class="btn btn-ghost" onclick="window.goto('p-admin-login')">CR Login →</button>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-text">
+        <div class="pill">🎓 CGC Landran — Smart Attendance</div>
+        <h1>Mark Your<br><span>Attendance</span><br>Right Now.</h1>
+        <p>Real-time attendance for every BCA section.<br>Your CR opens the session — you check yourself in.</p>
+      </div>
+
+      <div class="select-card">
+        <label class="field-label">Select Your Section</label>
+        <select id="stu-section" onchange="window.onSectionSelect()">
+          <option value="">— Choose Section —</option>
+          <option value="BCA-A">BCA A</option>
+          <option value="BCA-B">BCA B</option>
+          <option value="BCA-C">BCA C</option>
+          <option value="BCA-D">BCA D</option>
+        </select>
+
+        <button class="mark-btn off" id="mark-btn" onclick="window.goMarkAttendance()">
+          🔒 Attendance Not Active
+        </button>
+
+        <div class="live-indicator">
+          <div class="dot" id="live-dot"></div>
+          <span id="live-text">Select your section to see session status</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =====================================================
+     PAGE 2 — STUDENT FORM
+===================================================== -->
+  <div class="page" id="p-student-form">
+
+    <div class="ad-banner no-print">
+      <div class="ad-inner">Advertisement · Google AdSense</div>
+    </div>
+
+    <nav class="topnav">
+      <a class="brand" href="#" onclick="window.goto('p-landing')">
+        <img src="CGCL%20LOGO.png" class="cgc-badge" alt="CGCL">
+        <span class="brand-name">Class<em>Mark</em></span>
+      </a>
+      <div class="nav-actions">
+        <button class="btn btn-ghost" onclick="window.goto('p-landing')">← Back</button>
+      </div>
+    </nav>
+
+    <div class="centered-page">
+      <div class="glass-card">
+        <div class="card-header">
+          <div class="section-tag" id="form-sec-tag">BCA A</div>
+          <h2>Mark Your Presence</h2>
+          <p>Fill in your details and take a live photo to confirm your attendance for this lecture</p>
+        </div>
+
+        <div class="input-group">
+          <label class="field-label">Full Name</label>
+          <input type="text" id="stu-name" placeholder="e.g. Rahul Sharma">
+        </div>
+
+        <div class="input-group">
+          <label class="field-label">Roll Number</label>
+          <input type="text" id="stu-roll" placeholder="e.g. 2210994">
+        </div>
+
+        <div class="input-group">
+          <label class="field-label">Lecture ID</label>
+          <input type="text" id="stu-lecture" placeholder="e.g. BCA101" style="text-transform:uppercase;">
+        </div>
+
+        <div class="input-group">
+          <label class="field-label">📸 Live Photo — Camera Only</label>
+          <div class="cam-box" id="cam-box">
+            <div class="cam-empty" id="cam-empty">
+              <svg width="38" height="38" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" />
+                <circle cx="12" cy="13" r="4" />
+              </svg>
+              <span>Tap "Open Camera" below to start</span>
+            </div>
+            <video id="cam-video" autoplay muted playsinline></video>
+            <img id="cam-snap" class="snap" alt="">
+          </div>
+          <canvas id="snap-canvas" width="400" height="300"></canvas>
+
+          <div class="cam-actions">
+            <button class="btn btn-ghost" id="btn-open-cam" onclick="window.openCam()">📷 Open Camera</button>
+            <button class="btn btn-success" id="btn-capture" onclick="window.captureSnap()" style="display:none">✓
+              Capture Photo</button>
+            <button class="btn btn-ghost" id="btn-retake" onclick="window.retake()" style="display:none">↺
+              Retake</button>
+          </div>
+        </div>
+
+        <button class="btn btn-blue" style="width:100%;justify-content:center;font-size:16px;padding:15px;"
+          onclick="window.submitAttendance()">
+          ✓ Mark as Present
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =====================================================
+     PAGE 3 — SUCCESS
+===================================================== -->
+  <div class="page" id="p-success">
+
+    <div class="ad-banner no-print">
+      <div class="ad-inner">Advertisement · Google AdSense</div>
+    </div>
+
+    <nav class="topnav">
+      <a class="brand" href="#" onclick="window.goto('p-landing')">
+        <img src="CGCL%20LOGO.png" class="cgc-badge" alt="CGCL">
+        <span class="brand-name">Class<em>Mark</em></span>
+      </a>
+    </nav>
+
+    <div class="success-page">
+      <div class="tick-circle">
+        <svg width="50" height="50" fill="none" stroke="#22C55E" stroke-width="2.8" stroke-linecap="round"
+          stroke-linejoin="round" viewBox="0 0 24 24">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+      </div>
+
+      <h2>You're Marked Present! 🎉</h2>
+      <p>Attendance is marked for this Lecture.<br>Your CR will verify and approve your entry shortly.</p>
+
+      <div class="receipt">
+        <div class="rrow"><span class="rl">Name</span> <span class="rv" id="s-name">—</span></div>
+        <div class="rrow"><span class="rl">Roll No.</span> <span class="rv" id="s-roll">—</span></div>
+        <div class="rrow"><span class="rl">Section</span> <span class="rv" id="s-sec">—</span></div>
+        <div class="rrow"><span class="rl">Time</span> <span class="rv" id="s-time">—</span></div>
+        <div class="rrow"><span class="rl">Status</span> <span class="rv" style="color:var(--warn)">⏳ Pending CR
+            Approval</span></div>
+      </div>
+
+      <br>
+      <button class="btn btn-ghost" style="margin-top:8px;" onclick="window.resetAndGoHome()">← Back to Home</button>
+    </div>
+  </div>
+
+
+  <!-- =====================================================
+     PAGE 4 — ADMIN LOGIN
+===================================================== -->
+  <div class="page" id="p-admin-login">
+    <div class="login-page">
+      <div class="login-card">
+        <div class="brand" style="justify-content:center; margin-bottom:8px;">
+          <img src="CGCL%20LOGO.png" class="cgc-badge" alt="CGCL">
+          <span class="brand-name">Class<em>Mark</em></span>
+        </div>
+        <div class="role-pill">CR Admin Portal</div>
+        <h2>Welcome, Class Rep!</h2>
+        <p class="sub">Login with your CR Roll Number &amp; password to manage attendance for your section</p>
+
+        <div class="input-group" style="text-align:left;">
+          <label class="field-label">CR Roll Number</label>
+          <input type="text" id="admin-id" placeholder="e.g. CR001">
+        </div>
+
+        <div class="input-group" style="text-align:left; margin-bottom:6px;">
+          <label class="field-label">Password</label>
+          <input type="password" id="admin-pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')adminLogin()">
+        </div>
+
+        <p class="err" id="login-err">❌ Wrong credentials. Please try again.</p>
+
+        <button class="btn btn-blue"
+          style="width:100%;justify-content:center;font-size:15px;padding:14px;margin-top:4px;"
+          onclick="window.adminLogin()">
+          Login as CR →
+        </button>
+
+        <br>
+        <p style="font-size:13px;color:var(--muted);margin-top:16px;">
+          <a href="#" onclick="window.goto('p-landing')" style="color:var(--blue);text-decoration:none;">← Back to
+            Student View</a>
+        </p>
+
+        <div class="demo-box">
+          <span class="dg">Demo Credentials</span><br>
+          <b>CR A:</b> ID <b>CR001</b> / Pass <b>cgc123</b><br>
+          <b>CR B:</b> ID <b>CR002</b> / Pass <b>cgc123</b>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =====================================================
+     PAGE 5 — ADMIN DASHBOARD
+===================================================== -->
+  <div class="page" id="p-dashboard">
+
+    <div class="ad-banner no-print">
+      <div class="ad-inner">Advertisement · Google AdSense</div>
+    </div>
+
+    <!-- Dashboard Nav -->
+    <div class="dash-nav no-print">
+      <div class="left">
+        <img src="CGCL%20LOGO.png" class="cgc-badge" alt="CGCL">
+        <span class="brand-name">Class<em>Mark</em></span>
+        <div class="cr-meta">
+          <div class="name" id="d-cr-name">—</div>
+          <div class="sec" id="d-cr-sec">—</div>
+        </div>
+      </div>
+      <div class="right">
+        <button class="btn btn-ghost btn-danger" onclick="window.adminLogout()">Logout</button>
+      </div>
+    </div>
+
+    <div class="dashboard-wrap">
+      <div class="dash-body">
+
+        <!-- Attendance Toggle -->
+        <div class="toggle-card no-print" style="flex-direction:column; align-items:flex-start;">
+          <div
+            style="display:flex; justify-content:space-between; width:100%; align-items:center; flex-wrap:wrap; gap:16px;">
+            <div class="info">
+              <h3>Attendance Session</h3>
+              <p id="tog-info">Schedule or open the session for your section</p>
+            </div>
+            <div class="switch-wrap">
+              <span class="sw-label" id="sw-off-lbl" style="color:var(--muted)">Closed</span>
+              <label class="sw">
+                <input type="checkbox" id="att-toggle" onchange="window.toggleSession(this)">
+                <span class="sw-track"></span>
+              </label>
+              <span class="sw-label" style="color:var(--success)">Live</span>
+            </div>
+          </div>
+
+          <!-- Time Settings -->
+          <div id="time-settings-wrap"
+            style="width:100%; margin-top: 16px; border-top: 1px solid var(--border); padding-top: 16px;">
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+              <div style="flex:1; min-width:120px;">
+                <label class="field-label">Lecture ID</label>
+                <input type="text" id="session-lecture" placeholder="e.g. BCA101"
+                  style="margin-bottom:0; text-transform:uppercase;">
+              </div>
+              <div style="flex:1; min-width:120px;">
+                <label class="field-label">Start Time</label>
+                <input type="time" id="session-start" style="margin-bottom:0;">
+              </div>
+              <div style="flex:1; min-width:120px;">
+                <label class="field-label">End Time (Cutoff)</label>
+                <input type="time" id="session-end" style="margin-bottom:0;">
+              </div>
+            </div>
+            <p class="err" id="time-err" style="margin-top:14px; margin-bottom:0; display:none;"></p>
+          </div>
+        </div>
+
+        <!-- Manual Entry -->
+        <div class="toggle-card no-print" style="margin-top: 20px; flex-direction:column; align-items:flex-start;">
+          <div style="width:100%; margin-bottom:12px;">
+            <h3 style="font-family:'Outfit',sans-serif; font-size:17px; font-weight:700;">✍️ Manual Entry Override</h3>
+            <p style="font-size:13px; color:var(--muted);">Add a student without live camera verification. Automatically
+              approved.</p>
+          </div>
+          <div style="display:flex; gap:12px; width:100%; align-items:flex-end; flex-wrap:wrap;">
+            <div style="flex:1; min-width:140px;">
+              <label class="field-label">Student Name</label>
+              <input type="text" id="manual-name" placeholder="Name" style="margin-bottom:0;">
+            </div>
+            <div style="flex:1; min-width:140px;">
+              <label class="field-label">Roll Number</label>
+              <input type="text" id="manual-roll" placeholder="Roll No" style="margin-bottom:0;">
+            </div>
+            <div style="flex:1; min-width:140px;">
+              <label class="field-label">Lecture ID</label>
+              <input type="text" id="manual-lecture" placeholder="e.g. BCA101"
+                style="margin-bottom:0; text-transform:uppercase;">
+            </div>
+            <div style="min-width:120px; flex-shrink:0;">
+              <button class="btn btn-blue"
+                style="width:100%; justify-content:center; padding:13px 20px; margin-bottom:0; font-size:14px; font-weight:800;"
+                onclick="window.manualEntry()">+ Add Entry</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-row no-print">
+          <div class="stat-card">
+            <div class="stat-num g" id="st-present">0</div>
+            <div class="stat-lbl">✅ Approved Present</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num y" id="st-pending">0</div>
+            <div class="stat-lbl">⏳ Pending Approval</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num r" id="st-absent">60</div>
+            <div class="stat-lbl">❌ Absent</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num w">60</div>
+            <div class="stat-lbl">👥 Total Students</div>
+          </div>
+        </div>
+
+        <!-- Student Table -->
+        <div class="tbl-top no-print">
+          <h3>📋 Present Students</h3>
+          <button class="dl-btn" onclick="window.downloadPDF()">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Download Attendance PDF
+          </button>
+        </div>
+
+        <div class="tbl-wrap">
+          <div class="th-row">
+            <div>Photo</div>
+            <div>Student</div>
+            <div>Section</div>
+            <div>Status</div>
+            <div>Action</div>
+          </div>
+          <div id="students-tbody">
+            <div class="empty-tbl">
+              <span>🎓</span>
+              No students yet.<br>
+              <small style="font-size:13px;color:var(--muted)">Enable the session above so students can check
+                in.</small>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, onSnapshot, getDoc, collection, query, where, updateDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+    import { getStorage, ref, uploadString, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDl9Xk50H36NvAFt2Pn0mgdte3msUY5-ng",
+      authDomain: "classmark-543a5.firebaseapp.com",
+      projectId: "classmark-543a5",
+      storageBucket: "classmark-543a5.firebasestorage.app",
+      messagingSenderId: "155782877231",
+      appId: "1:155782877231:web:0e7a2ee472e24db16db6da"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    window.APP = {
+      sessions: {},
+      students: [],
+      section: '',
+      cr: null,
+      photo: null,
+      stream: null,
+    };
+
+    const CR_DB = {
+      'CR001': { section: 'BCA-A', name: 'Arjun Mehta (CR)' },
+      'CR002': { section: 'BCA-B', name: 'Priya Singh (CR)' },
+    };
+
+    // Expose routing globally so HTML onclick works
+    window.goto = function (id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo(0, 0);
+    };
+
+    window.formatTime12 = function (time24) {
+      if (!time24) return '';
+      let [h, m] = time24.split(':');
+      let ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      return `${h}:${m} ${ampm}`;
+    };
+
+    // ─── AUTHENTICATION (CR LOGIN) ─────────────────────────
+    window.adminLogin = async function () {
+      const id = document.getElementById('admin-id').value.trim().toUpperCase();
+      const pass = document.getElementById('admin-pw').value;
+      const crMeta = CR_DB[id];
+
+      if (!crMeta) {
+        showLoginErr('❌ Invalid CR ID.'); return;
+      }
+      if (!pass) {
+        showLoginErr('❌ Please enter password.'); return;
+      }
+
+      // To keep the UI matching, we fake an email domain for the Firebase Auth based on their ID
+      const fakeEmail = `${id.toLowerCase()}@cgc.com`;
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, fakeEmail, pass);
+        APP.cr = { id, uid: userCredential.user.uid, ...crMeta };
+
+        document.getElementById('login-err').style.display = 'none';
+        document.getElementById('d-cr-name').textContent = crMeta.name;
+        document.getElementById('d-cr-sec').textContent = '📍 ' + crMeta.section;
+
+        // Attach listeners for this CR's section
+        listenToSession(APP.cr.section, true);
+        listenToStudents(APP.cr.section);
+
+        window.goto('p-dashboard');
+      } catch (error) {
+        console.error("Auth error", error);
+        showLoginErr('❌ Wrong password or account not created yet.');
+      }
+    };
+
+    window.adminLogout = function () {
+      signOut(auth).then(() => {
+        APP.cr = null;
+        document.getElementById('admin-id').value = '';
+        document.getElementById('admin-pw').value = '';
+        window.goto('p-landing');
+      });
+    };
+
+    function showLoginErr(msg) {
+      const e = document.getElementById('login-err');
+      e.style.display = 'block';
+      e.textContent = msg;
+    }
+
+    // ─── FIREBASE REALTIME LISTENERS ────────────────────────
+    // Listens to global sessions (e.g. students viewing their section)
+    let unsubscribeSession = null;
+    function listenToSession(section, isCR = false) {
+      if (unsubscribeSession) unsubscribeSession();
+
+      unsubscribeSession = onSnapshot(doc(db, "sessions", section), (docSnap) => {
+        if (docSnap.exists()) {
+          APP.sessions[section] = docSnap.data();
+        } else {
+          APP.sessions[section] = { active: false };
+        }
+
+        // If Admin is logged in and viewing their section, sync the toggle UI
+        if (isCR && APP.cr && APP.cr.section === section) {
+          const sess = APP.sessions[section];
+          document.getElementById('att-toggle').checked = !!sess.active;
+          if (sess.active) {
+            document.getElementById('session-start').value = sess.start || '';
+            document.getElementById('session-end').value = sess.end || '';
+            document.getElementById('session-lecture').value = sess.lectureId || '';
+
+            document.getElementById('session-start').disabled = true;
+            document.getElementById('session-end').disabled = true;
+            document.getElementById('session-lecture').disabled = true;
+
+            document.getElementById('tog-info').textContent = `🟢 Session scheduled from ${window.formatTime12(sess.start)} to ${window.formatTime12(sess.end)}`;
+            document.getElementById('sw-off-lbl').style.color = 'var(--success)';
+          } else {
+            document.getElementById('session-start').disabled = false;
+            document.getElementById('session-end').disabled = false;
+            document.getElementById('session-lecture').disabled = false;
+            document.getElementById('tog-info').textContent = 'Schedule or open the session for your section';
+            document.getElementById('sw-off-lbl').style.color = 'var(--muted)';
+
+            if (!document.getElementById('session-start').value) {
+              const now = new Date();
+              const h = now.getHours().toString().padStart(2, '0');
+              const m = now.getMinutes().toString().padStart(2, '0');
+              document.getElementById('session-start').value = `${h}:${m}`;
+
+              now.setMinutes(now.getMinutes() + 15);
+              const end_h = now.getHours().toString().padStart(2, '0');
+              const end_m = now.getMinutes().toString().padStart(2, '0');
+              document.getElementById('session-end').value = `${end_h}:${end_m}`;
+            }
+          }
+        }
+      });
+    }
+
+    let unsubscribeStudents = null;
+    function listenToStudents(section) {
+      if (unsubscribeStudents) unsubscribeStudents();
+
+      const q = query(collection(db, "attendance"), where("section", "==", section));
+      unsubscribeStudents = onSnapshot(q, (snapshot) => {
+        APP.students = [];
+        snapshot.forEach(doc => {
+          APP.students.push({ id: doc.id, ...doc.data() });
+        });
+        // Sort students by time
+        APP.students.sort((a, b) => a.timestamp - b.timestamp);
+        if (APP.cr && APP.cr.section === section) {
+          updateDash();
+        }
+      });
+    }
+
+    // Triggered when student selects a section in the dropdown
+    window.onSectionSelect = function () {
+      const sec = document.getElementById('stu-section').value;
+      if (sec) {
+        listenToSession(sec, false);
+      }
+    };
+
+    // Polling for UI update on Student Landing
+    setInterval(() => {
+      const sec = document.getElementById('stu-section').value;
+      const btn = document.getElementById('mark-btn');
+      const dot = document.getElementById('live-dot');
+      const txt = document.getElementById('live-text');
+
+      let live = false;
+      let textMsg = '';
+
+      if (!sec) {
+        textMsg = 'Select your section to see session status';
+      } else {
+        const sess = APP.sessions[sec];
+        if (!sess || !sess.active) {
+          textMsg = 'Waiting for your CR to start the session...';
+        } else {
+          const now = new Date();
+          const currentHHMM = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+
+          if (currentHHMM < sess.start) {
+            textMsg = `⏳ Session starts at ${window.formatTime12(sess.start)}`;
+          } else if (currentHHMM > sess.end) {
+            textMsg = `❌ Session ended at ${window.formatTime12(sess.end)}`;
+          } else {
+            live = true;
+            textMsg = `🟢 Session LIVE (Closes ${window.formatTime12(sess.end)}) — mark yourself in!`;
+          }
+        }
+      }
+
+      btn.className = 'mark-btn ' + (live ? 'on' : 'off');
+      btn.innerHTML = live ? '✓ Mark Attendance Now' : '🔒 Attendance Not Active';
+      dot.className = 'dot' + (live ? ' live' : '');
+      txt.textContent = textMsg;
+    }, 1500);
+
+    // ─── ADMIN TOGGLE SESSION ─────────────────────────────────
+    window.toggleSession = async function (cb) {
+      if (!APP.cr) return;
+      const sec = APP.cr.section;
+
+      const startInp = document.getElementById('session-start');
+      const endInp = document.getElementById('session-end');
+      const lecInp = document.getElementById('session-lecture');
+      const errP = document.getElementById('time-err');
+
+      if (cb.checked) {
+        if (!startInp.value || !endInp.value || !lecInp.value.trim()) {
+          cb.checked = false;
+          errP.textContent = '⚠️ Please set Lecture ID, Start and End time.';
+          errP.style.display = 'block';
+          return;
+        }
+        if (startInp.value >= endInp.value) {
+          cb.checked = false;
+          errP.textContent = '⚠️ End time must be after Start time.';
+          errP.style.display = 'block';
+          return;
+        }
+        errP.style.display = 'none';
+
+        // Save to Firestore
+        await setDoc(doc(db, "sessions", sec), {
+          active: true,
+          lectureId: lecInp.value.trim().toUpperCase(),
+          start: startInp.value,
+          end: endInp.value,
+          updatedBy: APP.cr.id,
+          timestamp: Date.now()
+        });
+      } else {
+        // Disable session
+        await setDoc(doc(db, "sessions", sec), { active: false }, { merge: true });
+      }
+    };
+
+    window.approve = async function (docId) {
+      try {
+        await updateDoc(doc(db, "attendance", docId), { status: 'approved' });
+      } catch (e) {
+        alert("Error approving attendance: " + e.message);
+      }
+    };
+
+    window.manualEntry = async function () {
+      if (!APP.cr) return;
+
+      const name = document.getElementById('manual-name').value.trim();
+      const roll = document.getElementById('manual-roll').value.trim();
+      const lecId = document.getElementById('manual-lecture').value.trim().toUpperCase();
+
+      if (!name || !roll || !lecId) {
+        alert('⚠️ Please fill out the Name, Roll Number, and Lecture ID completely.');
+        return;
+      }
+
+      const now = new Date();
+      const today = now.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+
+      // Create an initial-based placeholder image
+      const canvas = document.createElement('canvas');
+      canvas.width = 120; canvas.height = 120;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#162032';
+      ctx.fillRect(0, 0, 120, 120);
+      ctx.fillStyle = '#3B82F6';
+      ctx.font = 'bold 44px "Outfit", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const init = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+      ctx.fillText(init || 'CR', 60, 60);
+      const placeholderCam = canvas.toDataURL('image/jpeg');
+
+      const entry = {
+        name: name + ' ✍️',
+        roll,
+        lectureId: lecId,
+        section: APP.cr.section,
+        photo: placeholderCam, // Storing placeholder directly as Base64 because it's tiny
+        time: now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+        date: today,
+        status: 'approved',
+        timestamp: Date.now(),
+        isManual: true
+      };
+
+      const docIdStr = `${entry.roll}_${entry.date.replace(/\//g, '-')}_${entry.lectureId}`;
+
+      try {
+        // Unique doc ID prevents duplicates directly in database!
+        const docRef = doc(db, "attendance", docIdStr);
+        const snap = await getDoc(docRef);
+        if (snap.exists()) {
+          alert(`⚠️ ${name} (${roll}) is already marked present for Lecture ${lecId}.`);
+          return;
+        }
+        await setDoc(docRef, entry);
+        document.getElementById('manual-name').value = '';
+        document.getElementById('manual-roll').value = '';
+        alert(`✅ Successfully added override for ${name}.`);
+      } catch (e) {
+        alert("Error adding manual entry: " + e.message);
+      }
+    };
+
+    function updateDash() {
+      if (!APP.cr) return;
+      const list = APP.students; // Already filtered by section via Firestore query
+      const appr = list.filter(s => s.status === 'approved').length;
+      const pend = list.filter(s => s.status === 'pending').length;
+      const TOTAL = 60;
+
+      document.getElementById('st-present').textContent = appr;
+      document.getElementById('st-pending').textContent = pend;
+      document.getElementById('st-absent').textContent = Math.max(0, TOTAL - list.length);
+
+      const tbody = document.getElementById('students-tbody');
+      if (!list.length) {
+        tbody.innerHTML = `<div class="empty-tbl"><span>🎓</span>No students have marked attendance yet.<br><small style="font-size:13px;color:var(--muted)">Enable the session above so students can check in.</small></div>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(s => `
+    <div class="tr-row">
+      <div><img src="${s.photo}" class="stu-photo" alt="${s.name}"></div>
+      <div>
+        <div class="stu-name">${s.name}</div>
+        <div class="stu-roll">${s.roll} &middot; ${s.time} &middot; <span style="color:var(--blue)">${s.lectureId}</span></div>
+      </div>
+      <div><span class="sec-chip">${s.section}</span></div>
+      <div>
+        <span class="badge ${s.status === 'approved' ? 'appr' : 'pend'}">
+          ${s.status === 'approved' ? '✅ Approved' : '⏳ Pending'}
+        </span>
+      </div>
+      <div>
+        ${s.status === 'pending'
+          ? `<button class="appr-btn" onclick="approve('${s.id}')">✓ Approve</button>`
+          : `<button class="appr-btn done" disabled>Approved</button>`}
+      </div>
+    </div>
+  `).join('');
+    }
+
+
+    // ─── STUDENT MARK ATTENDANCE ─────────────────────────────────
+
+    window.goMarkAttendance = function () {
+      const sec = document.getElementById('stu-section').value;
+      if (!sec) { alert('Please select your section first!'); return; }
+
+      const sess = APP.sessions[sec];
+      if (!sess || !sess.active) return;
+
+      const now = new Date();
+      const currentHHMM = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+
+      if (currentHHMM < sess.start) {
+        alert(`Attendance opens at ${window.formatTime12(sess.start)}`);
+        return;
+      }
+      if (currentHHMM > sess.end) {
+        alert(`Late Entry Blocked. Attendance closed at ${window.formatTime12(sess.end)}`);
+        return;
+      }
+
+      APP.section = sec;
+      document.getElementById('form-sec-tag').textContent = sec.replace('-', ' – ');
+      document.getElementById('stu-lecture').value = '';
+      window.goto('p-student-form');
+    };
+
+    window.openCam = async function () {
+      try {
+        APP.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+        const vid = document.getElementById('cam-video');
+        vid.srcObject = APP.stream;
+        document.getElementById('cam-box').classList.add('streaming');
+        document.getElementById('cam-empty').style.display = 'none';
+        document.getElementById('cam-snap').style.display = 'none';
+        document.getElementById('btn-open-cam').style.display = 'none';
+        document.getElementById('btn-capture').style.display = '';
+      } catch (e) {
+        alert('❌ Camera permission denied. Please allow camera access to mark attendance.');
+      }
+    };
+
+    window.captureSnap = function () {
+      const vid = document.getElementById('cam-video');
+      const canvas = document.getElementById('snap-canvas');
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(vid, 0, 0, 400, 300);
+
+      const timestamp = new Date().toLocaleString('en-IN');
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.fillRect(0, 275, 400, 25);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '13px "DM Sans", sans-serif';
+      ctx.fillText('🔴 LIVE CAM · ' + timestamp, 10, 292);
+
+      APP.photo = canvas.toDataURL('image/jpeg', 0.82);
+
+      const snap = document.getElementById('cam-snap');
+      snap.src = APP.photo;
+      snap.style.display = 'block';
+      vid.style.display = 'none';
+
+      if (APP.stream) APP.stream.getTracks().forEach(t => t.stop());
+
+      document.getElementById('btn-capture').style.display = 'none';
+      document.getElementById('btn-retake').style.display = '';
+    };
+
+    window.retake = function () {
+      APP.photo = null;
+      document.getElementById('cam-snap').style.display = 'none';
+      document.getElementById('cam-video').style.display = '';
+      document.getElementById('btn-retake').style.display = 'none';
+      window.openCam();
+    };
+
+    window.submitAttendance = async function () {
+      const btnSubmit = document.getElementById('btn-submit');
+
+      const name = document.getElementById('stu-name').value.trim();
+      const roll = document.getElementById('stu-roll').value.trim();
+      const lecId = document.getElementById('stu-lecture').value.trim().toUpperCase();
+
+      if (!name) { alert('Please enter your full name!'); return; }
+      if (!roll) { alert('Please enter your roll number!'); return; }
+      if (!lecId) { alert('Please enter the Lecture ID!'); return; }
+      if (!APP.photo) { alert('Please capture your live photo!'); return; }
+
+      const sess = APP.sessions[APP.section];
+      if (!sess || !sess.active) {
+        alert('Session is no longer active!');
+        return;
+      }
+
+      if (lecId !== sess.lectureId) {
+        alert('❌ Invalid Lecture ID! Please counter-check with your CR.');
+        return;
+      }
+
+      const now = new Date();
+      const currentHHMM = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+      if (currentHHMM > sess.end) {
+        alert(`Late Entry Blocked. Attendance closed at ${window.formatTime12(sess.end)}`);
+        return;
+      }
+
+      const today = now.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+      const docIdStr = `${roll}_${today.replace(/\//g, '-')}_${lecId}`;
+
+      try {
+        // 1. Check duplicate FIRST
+        const docRef = doc(db, "attendance", docIdStr);
+        const snap = await getDoc(docRef);
+        if (snap.exists()) {
+          alert('⚠️ Attendance already marked for this lecture.');
+          return;
+        }
+
+        // Replace click handlers to prevent double click
+        document.body.style.cursor = 'wait';
+
+        // 2. Upload photo to Firebase Storage
+        const photoRef = ref(storage, `attendance/${APP.section}/${docIdStr}.jpg`);
+        await uploadString(photoRef, APP.photo, 'data_url');
+        const photoUrl = await getDownloadURL(photoRef);
+
+        // 3. Save entry to Firestore using download URL
+        const entry = {
+          name,
+          roll,
+          lectureId: lecId,
+          section: APP.section,
+          photo: photoUrl,
+          time: now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+          date: today,
+          status: 'pending',
+          timestamp: Date.now()
+        };
+
+        await setDoc(docRef, entry);
+
+        // Fill success receipt
+        document.getElementById('s-name').textContent = name;
+        document.getElementById('s-roll').textContent = roll;
+        document.getElementById('s-sec').textContent = APP.section;
+        document.getElementById('s-time').textContent = entry.time;
+
+        // Reset form
+        document.getElementById('stu-name').value = '';
+        document.getElementById('stu-roll').value = '';
+        document.getElementById('cam-snap').style.display = 'none';
+        document.getElementById('cam-empty').style.display = '';
+        document.getElementById('cam-box').classList.remove('streaming');
+        document.getElementById('btn-open-cam').style.display = '';
+        document.getElementById('btn-capture').style.display = 'none';
+        document.getElementById('btn-retake').style.display = 'none';
+        APP.photo = null;
+
+        document.body.style.cursor = 'default';
+        window.goto('p-success');
+
+      } catch (e) {
+        document.body.style.cursor = 'default';
+        alert("Error saving attendance: " + e.message);
+      }
+    };
+
+    window.resetAndGoHome = function () {
+      window.goto('p-landing');
+      document.getElementById('stu-section').value = '';
+    };
+
+    window.downloadPDF = function () {
+      if (!APP.cr) return;
+      const sec = APP.cr.section;
+      const list = APP.students.filter(s => s.status === 'approved');
+      const date = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+      const time = new Date().toLocaleTimeString('en-IN');
+
+      const rows = list.length
+        ? list.map((s, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${s.roll}</td>
+          <td>${s.name}</td>
+          <td>${s.section}</td>
+          <td>${s.time}</td>
+          <td style="color:#16a34a;font-weight:700;">Present</td>
+        </tr>`).join('')
+        : `<tr><td colspan="6" style="text-align:center;color:#888;padding:20px;">No approved entries yet</td></tr>`;
+
+      const win = window.open('', '_blank');
+      win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
+  <title>Attendance — ${sec} — ${date}</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,sans-serif;padding:36px;color:#111;background:#fff}
+    .hdr{text-align:center;padding-bottom:20px;border-bottom:3px solid #3B82F6;margin-bottom:26px}
+    .hdr h1{font-size:22px;color:#0B1622;margin-bottom:6px}
+    .hdr p{font-size:14px;color:#555}
+    .meta{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:22px;font-size:13px;color:#444}
+    .meta b{color:#0B1622}
+    table{width:100%;border-collapse:collapse;font-size:14px}
+    th{background:#0B1622;color:#fff;padding:11px 14px;text-align:left;font-size:12px;letter-spacing:0.5px}
+    td{padding:10px 14px;border-bottom:1px solid #e8e8e8}
+    tr:nth-child(even) td{background:#f7f7f7}
+    .summary{margin-top:22px;font-size:14px;color:#333;padding:12px 16px;background:#f0f7f0;border-radius:6px;border-left:4px solid #16a34a}
+    .sigs{display:flex;justify-content:space-between;margin-top:70px}
+    .sig{border-top:1px solid #999;width:180px;text-align:center;padding-top:8px;font-size:12px;color:#555}
+    .footer{margin-top:36px;text-align:center;font-size:11px;color:#aaa}
+    .blue{color:#3B82F6;font-weight:700}
+  </style>
+  </head><body>
+  <div class="hdr">
+    <h1>📚 Chandigarh Group of Colleges, Landran</h1>
+    <p>Attendance Sheet &nbsp;|&nbsp; <span class="blue">${sec}</span></p>
+  </div>
+  <div class="meta">
+    <div><b>Date:</b> ${date}</div>
+    <div><b>Time Generated:</b> ${time}</div>
+    <div><b>Section:</b> ${sec}</div>
+    <div><b>CR:</b> ${APP.cr.name}</div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Roll Number</th>
+        <th>Student Name</th>
+        <th>Section</th>
+        <th>Time Marked</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>${rows}</tbody>
+  </table>
+  <div class="summary">
+    <b>Summary:</b> &nbsp; Total Present (Approved): <b>${list.length}</b> &nbsp;|&nbsp; Total Students: <b>60</b> &nbsp;|&nbsp; Absent: <b>${60 - list.length}</b>
+  </div>
+  <div class="sigs">
+    <div class="sig">CR Signature</div>
+    <div class="sig">Faculty Signature</div>
+    <div class="sig">HOD Signature</div>
+  </div>
+  <div class="footer">
+    Generated by ClassMark &mdash; CGC Landran Smart Attendance System &nbsp;&middot;&nbsp; ${date}
+  </div>
+  </body></html>`);
+      win.document.close();
+      setTimeout(() => win.print(), 600);
+    };
+
+  </script>
+
+</body>
+
+</html>
