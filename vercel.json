@@ -1,0 +1,12 @@
+{
+    "rewrites": [
+        {
+            "source": "/",
+            "destination": "/ClassMark.html"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/ClassMark.html"
+        }
+    ]
+}
