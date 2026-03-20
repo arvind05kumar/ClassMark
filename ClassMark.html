@@ -1143,9 +1143,10 @@
     </div>
 
     <!-- Thin Footer -->
-    <div style="text-align: center; padding: 16px 20px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); margin-top: auto; background: rgba(0,0,0,0.2);">
+    <div
+      style="text-align: center; padding: 16px 20px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); margin-top: auto; background: rgba(0,0,0,0.2);">
       &copy; 2026 ClassMark All Rights Reserved.<br>
-      Designed by Arvind Kumar with ❤️ for CGC Landran
+      Designed by Arvind Kumar with 🤍 for CGC Landran
     </div>
   </div>
 
@@ -1463,7 +1464,8 @@
         </div>
 
         <div style="margin-top: 30px; text-align: center;" class="no-print">
-          <button class="btn btn-ghost" onclick="window.clearAttendance()" style="display:inline-flex; border: 1px solid rgba(239,68,68,0.3); color: var(--danger); font-size: 14px; padding: 12px 24px;">
+          <button class="btn btn-ghost" onclick="window.clearAttendance()"
+            style="display:inline-flex; border: 1px solid rgba(239,68,68,0.3); color: var(--danger); font-size: 14px; padding: 12px 24px;">
             ⚠️ Reset / Clear All Attendance for your Section
           </button>
         </div>
@@ -1754,16 +1756,16 @@
         document.body.style.cursor = 'wait';
         const q = query(collection(db, "attendance"), where("section", "==", sec));
         const snap = await getDocs(q);
-        
+
         let count = 0;
         snap.forEach(d => {
           deleteDoc(doc(db, "attendance", d.id));
           count++;
         });
-        
+
         // Also disable the session
         await setDoc(doc(db, "sessions", sec), { active: false }, { merge: true });
-        
+
         document.body.style.cursor = 'default';
         if (count === 0) {
           alert(`Section ${sec} is already clear.`);
@@ -2051,7 +2053,9 @@
     window.downloadPDF = function () {
       if (!APP.cr) return;
       const sec = APP.cr.section;
-      const list = APP.students.filter(s => s.status === 'approved');
+      const list = APP.students
+        .filter(s => s.status === 'approved')
+        .sort((a, b) => a.roll.localeCompare(b.roll, undefined, { numeric: true, sensitivity: 'base' }));
       const date = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
       const time = new Date().toLocaleTimeString('en-IN');
 
