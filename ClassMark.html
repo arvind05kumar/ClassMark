@@ -1124,11 +1124,7 @@
       <div class="select-card">
         <label class="field-label">Select Your Section</label>
         <select id="stu-section" onchange="window.onSectionSelect()">
-          <option value="">— Choose Section —</option>
-          <option value="BCA-A">BCA A</option>
-          <option value="BCA-B">BCA B</option>
-          <option value="BCA-C">BCA C</option>
-          <option value="BCA-D">BCA D</option>
+          <option value="">— Loading Sections... —</option>
         </select>
 
         <button class="mark-btn off" id="mark-btn" onclick="window.goMarkAttendance()">
@@ -1476,6 +1472,85 @@
 
 
   <!-- =====================================================
+     PAGE 6 — SUPER ADMIN PORTAL
+===================================================== -->
+  <div class="page" id="p-super-admin">
+    <div class="dash-nav no-print">
+      <div class="left">
+        <img src="CGCL%20LOGO.png" class="cgc-badge" alt="CGCL">
+        <span class="brand-name">Super<em>Admin</em></span>
+        <div class="cr-meta">
+          <div class="name">Management Portal</div>
+          <div class="sec">📍 CGC Landran</div>
+        </div>
+      </div>
+      <div class="right">
+        <button class="btn btn-ghost btn-danger" onclick="window.adminLogout()">Logout</button>
+      </div>
+    </div>
+
+    <div class="dashboard-wrap">
+      <div class="dash-body">
+        <div class="toggle-card no-print" style="flex-direction:column; align-items:flex-start;">
+          <div style="width:100%; margin-bottom:16px;">
+            <h3 style="font-family:'Outfit',sans-serif; font-size:18px; font-weight:700;">➕ Create New CR Account</h3>
+            <p style="font-size:13px; color:var(--muted);">Assign CRs by department and section.</p>
+          </div>
+          <div style="display:flex; gap:12px; width:100%; flex-wrap:wrap; margin-bottom: 12px;">
+            <div style="flex:1; min-width:140px;">
+              <label class="field-label">Department</label>
+              <input type="text" id="sa-dept" placeholder="e.g. BCA, MCA, B.Tech">
+            </div>
+            <div style="flex:1; min-width:140px;">
+              <label class="field-label">Section</label>
+              <input type="text" id="sa-sec" placeholder="e.g. BCA-A">
+            </div>
+            <div style="flex:1; min-width:140px;">
+              <label class="field-label">CR Full Name</label>
+              <input type="text" id="sa-name" placeholder="e.g. Arjun Mehta">
+            </div>
+          </div>
+          <div style="display:flex; gap:12px; width:100%; flex-wrap:wrap; align-items:flex-end;">
+            <div style="flex:1; min-width:140px;">
+              <label class="field-label">Login ID (Must be unique)</label>
+              <input type="text" id="sa-id" placeholder="e.g. CR003" style="text-transform:uppercase;">
+            </div>
+            <div style="flex:1; min-width:140px;">
+              <label class="field-label">Login Password</label>
+              <input type="text" id="sa-pass" placeholder="Password">
+            </div>
+            <div style="min-width:120px; flex-shrink:0;">
+              <button class="btn btn-blue"
+                style="width:100%; justify-content:center; padding:13px 20px; margin-bottom:0; font-size:14px; font-weight:800;"
+                onclick="window.createCR()">+ Save CR</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="tbl-top no-print" style="margin-top: 30px;">
+          <h3>📋 Active CR Accounts</h3>
+        </div>
+
+        <div class="tbl-wrap">
+          <div class="th-row" style="grid-template-columns: 1fr 1.5fr 1fr 1fr 100px;">
+            <div>Login ID</div>
+            <div>CR Name</div>
+            <div>Department</div>
+            <div>Section</div>
+            <div>Action</div>
+          </div>
+          <div id="sa-cr-list">
+            <div class="empty-tbl">
+              <span>🛡️</span>Loading CRs...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =====================================================
      JAVASCRIPT
 ===================================================== -->
   <script type="module">
@@ -1507,10 +1582,27 @@
       stream: null,
     };
 
-    const CR_DB = {
-      'CR001': { section: 'BCA-A', name: 'Arjun Mehta (CR)' },
-      'CR002': { section: 'BCA-B', name: 'Priya Singh (CR)' },
-    };
+    // Dynamically load active sections for the dropdown
+    onSnapshot(collection(db, "cr_users"), (snap) => {
+      const select = document.getElementById('stu-section');
+      if (!select) return;
+      const currentVal = select.value;
+      select.innerHTML = '<option value="">— Choose Section —</option>';
+      const sections = [];
+      snap.forEach(doc => {
+        const data = doc.data();
+        if (data.sec && !sections.includes(data.sec)) sections.push(data.sec);
+      });
+      sections.sort().forEach(sec => {
+        const opt = document.createElement('option');
+        opt.value = sec;
+        opt.textContent = sec;
+        select.appendChild(opt);
+      });
+      if (sections.includes(currentVal)) {
+        select.value = currentVal;
+      }
+    });
 
     // Expose routing globally so HTML onclick works
     window.goto = function (id) {
@@ -1529,46 +1621,136 @@
 
     // ─── AUTHENTICATION (CR LOGIN) ─────────────────────────
     window.adminLogin = async function () {
-      const id = document.getElementById('admin-id').value.trim().toUpperCase();
+      const id = document.getElementById('admin-id').value.trim();
       const pass = document.getElementById('admin-pw').value;
-      const crMeta = CR_DB[id];
 
-      if (!crMeta) {
-        showLoginErr('❌ Invalid CR ID.'); return;
-      }
-      if (!pass) {
-        showLoginErr('❌ Please enter password.'); return;
+      if (!id || !pass) {
+        showLoginErr('❌ Please fill all fields.'); return;
       }
 
-      // To keep the UI matching, we fake an email domain for the Firebase Auth based on their ID
-      const fakeEmail = `${id.toLowerCase()}@cgc.com`;
-
-      try {
-        const userCredential = await signInWithEmailAndPassword(auth, fakeEmail, pass);
-        APP.cr = { id, uid: userCredential.user.uid, ...crMeta };
-
+      // Check Super Admin
+      if (id === 'super_admin_cgc' && pass === '@CGCadmin123') {
+        APP.cr = { role: 'superadmin' };
         document.getElementById('login-err').style.display = 'none';
-        document.getElementById('d-cr-name').textContent = crMeta.name;
-        document.getElementById('d-cr-sec').textContent = '📍 ' + crMeta.section;
+        window.goto('p-super-admin');
+        window.fetchCRs();
+        return;
+      }
 
-        // Attach listeners for this CR's section
+      // Check Firestore for CR
+      try {
+        document.getElementById('login-err').style.display = 'none';
+        document.body.style.cursor = 'wait';
+        
+        const docSnap = await getDoc(doc(db, "cr_users", id.toUpperCase()));
+        if (!docSnap.exists()) {
+          document.body.style.cursor = 'default';
+          showLoginErr('❌ Invalid CR ID.'); return;
+        }
+        
+        const data = docSnap.data();
+        if (data.pass !== pass) {
+          document.body.style.cursor = 'default';
+          showLoginErr('❌ Wrong password.'); return;
+        }
+        
+        // Success
+        APP.cr = { id: id.toUpperCase(), section: data.sec, name: data.name, dept: data.dept, role: 'cr' };
+        document.getElementById('d-cr-name').textContent = data.name;
+        document.getElementById('d-cr-sec').textContent = '📍 ' + data.sec;
+
         listenToSession(APP.cr.section, true);
         listenToStudents(APP.cr.section);
 
+        document.body.style.cursor = 'default';
         window.goto('p-dashboard');
       } catch (error) {
+        document.body.style.cursor = 'default';
         console.error("Auth error", error);
-        showLoginErr('❌ Wrong password or account not created yet.');
+        showLoginErr('❌ Database error. Please try again.');
       }
     };
 
     window.adminLogout = function () {
-      signOut(auth).then(() => {
-        APP.cr = null;
-        document.getElementById('admin-id').value = '';
-        document.getElementById('admin-pw').value = '';
-        window.goto('p-landing');
+      APP.cr = null;
+      document.getElementById('admin-id').value = '';
+      document.getElementById('admin-pw').value = '';
+      try { signOut(auth); } catch(e) {}
+      window.goto('p-landing');
+    };
+
+    // ─── SUPER ADMIN LOGIC ─────────────────────────────────
+    window.createCR = async function() {
+      const dept = document.getElementById('sa-dept').value.trim().toUpperCase();
+      const sec = document.getElementById('sa-sec').value.trim().toUpperCase();
+      const name = document.getElementById('sa-name').value.trim();
+      const id = document.getElementById('sa-id').value.trim().toUpperCase();
+      const pass = document.getElementById('sa-pass').value.trim();
+
+      if(!dept || !sec || !name || !id || !pass) {
+        alert("⚠️ Please fill all fields to create a CR."); return;
+      }
+
+      try {
+        document.body.style.cursor = 'wait';
+        const docRef = doc(db, "cr_users", id);
+        const snap = await getDoc(docRef);
+        if(snap.exists()) {
+          alert(`❌ Login ID ${id} already exists! Choose another.`);
+          document.body.style.cursor = 'default';
+          return;
+        }
+
+        await setDoc(docRef, { dept, sec, name, pass, timestamp: Date.now() });
+        
+        document.getElementById('sa-dept').value = '';
+        document.getElementById('sa-sec').value = '';
+        document.getElementById('sa-name').value = '';
+        document.getElementById('sa-id').value = '';
+        document.getElementById('sa-pass').value = '';
+        
+        document.body.style.cursor = 'default';
+        alert(`✅ Successfully created CR Account: ${id}`);
+      } catch (e) {
+        document.body.style.cursor = 'default';
+        alert("Error creating CR: " + e.message);
+      }
+    };
+
+    let unsubscribeCRs = null;
+    window.fetchCRs = function() {
+      if (unsubscribeCRs) unsubscribeCRs();
+      unsubscribeCRs = onSnapshot(collection(db, "cr_users"), (snapshot) => {
+        const list = [];
+        snapshot.forEach(doc => {
+          list.push({ id: doc.id, ...doc.data() });
+        });
+        list.sort((a,b) => b.timestamp - a.timestamp);
+        
+        const tbody = document.getElementById('sa-cr-list');
+        if (!list.length) {
+          tbody.innerHTML = `<div class="empty-tbl"><span>🛡️</span>No CR Accounts created yet.</div>`;
+          return;
+        }
+
+        tbody.innerHTML = list.map(cr => `
+          <div class="tr-row" style="grid-template-columns: 1fr 1.5fr 1fr 1fr 100px;">
+            <div style="font-weight: bold; color: var(--blue); margin-top: auto; margin-bottom: auto;">${cr.id}</div>
+            <div style="margin-top: auto; margin-bottom: auto;">${cr.name}</div>
+            <div style="margin-top: auto; margin-bottom: auto;">${cr.dept}</div>
+            <div style="margin-top: auto; margin-bottom: auto;"><span class="sec-chip">${cr.sec}</span></div>
+            <div style="margin-top: auto; margin-bottom: auto;">
+              <button class="btn btn-ghost btn-danger" style="padding: 6px 12px; font-size: 12px; height: 32px;" onclick="window.deleteCR('${cr.id}')">Delete</button>
+            </div>
+          </div>
+        `).join('');
       });
+    };
+
+    window.deleteCR = async function(id) {
+      if(confirm(`⚠️ Are you sure you want to delete CR Account ${id}?`)) {
+        await deleteDoc(doc(db, "cr_users", id));
+      }
     };
 
     function showLoginErr(msg) {
