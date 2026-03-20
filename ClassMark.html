@@ -1299,11 +1299,11 @@
             Student View</a>
         </p>
 
-        <div class="demo-box">
+        <!-- <div class="demo-box">
           <span class="dg">Demo Credentials</span><br>
           <b>CR A:</b> ID <b>CR001</b> / Pass <b>cgc123</b><br>
           <b>CR B:</b> ID <b>CR002</b> / Pass <b>cgc123</b>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -1702,18 +1702,25 @@
         }
         errP.style.display = 'none';
 
-        // Save to Firestore
-        await setDoc(doc(db, "sessions", sec), {
-          active: true,
-          lectureId: lecInp.value.trim().toUpperCase(),
-          start: startInp.value,
-          end: endInp.value,
-          updatedBy: APP.cr.id,
-          timestamp: Date.now()
-        });
+        try {
+          await setDoc(doc(db, "sessions", sec), {
+            active: true,
+            lectureId: lecInp.value.trim().toUpperCase(),
+            start: startInp.value,
+            end: endInp.value,
+            updatedBy: APP.cr.id,
+            timestamp: Date.now()
+          });
+        } catch (e) {
+          alert("Error saving session: " + e.message);
+        }
       } else {
         // Disable session
-        await setDoc(doc(db, "sessions", sec), { active: false }, { merge: true });
+        try {
+          await setDoc(doc(db, "sessions", sec), { active: false }, { merge: true });
+        } catch (e) {
+          console.error("Error disabling session:", e);
+        }
       }
     };
 
@@ -1947,10 +1954,9 @@
         // Replace click handlers to prevent double click
         document.body.style.cursor = 'wait';
 
-        // 2. Upload photo to Firebase Storage
-        const photoRef = ref(storage, `attendance/${APP.section}/${docIdStr}.jpg`);
-        await uploadString(photoRef, APP.photo, 'data_url');
-        const photoUrl = await getDownloadURL(photoRef);
+        // 2. Store Base64 Photo directly in Firestore (Bypasses CORS & Storage limits!)
+        // Our 400x300 compressed JPEG is only ~15-30KB, well under the 1MB Firestore doc limit.
+        const photoUrl = APP.photo;
 
         // 3. Save entry to Firestore using download URL
         const entry = {
